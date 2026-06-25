@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Vinted — Laia & Tú</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #09B1BA;
+            --teal-dark: #078a91;
+            --teal-light: #e6f8f9;
+            --red: #e74c3c;
+            --green: #27ae60;
+            --red-light: #fdecea;
+            --green-light: #eafaf1;
+            --bg: #f0f4f5;
+            --card: #ffffff;
+            --text: #1a2e30;
+            --muted: #6b8a8d;
+            --border: #dde8e9;
+            --sold-bg: #f5f5f5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--teal);
+            padding: 18px 20px 14px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 12px rgba(9,177,186,0.25);
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .header-subtitle {
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+            margin-top: 1px;
+        }
+        .header-sync {
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .sync-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #a8f0cc;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+        /* STATS BAR */
+        .stats-bar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+        }
+        .stats-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+        }
+        .stat-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--teal);
+        }
+        .stat-label {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* ACTIONS */
+        .actions {
+            padding: 16px 20px 8px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+        }
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-secondary {
+            background: white;
+            color: var(--teal);
+            border: 2px solid var(--teal);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* FILTER TABS */
+        .filter-bar {
+            padding: 0 20px 12px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 8px;
+        }
+        .filter-tab {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .filter-tab.active {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+
+        /* GRID */
+        .grid {
+            padding: 0 20px 100px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        /* CARD */
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+        .card.vendido { background: var(--sold-bg); opacity: 0.85; }
+        .card:hover { box-shadow: 0 6px 20px rgba(9,177,186,0.12); }
+
+        .card-img {
+            width: 100%;
+            height: 170px;
+            background: #eef2f3;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
+            font-size: 36px;
+        }
+        .card-code {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.55);
+            color: white;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .card-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .badge-disponible { background: var(--teal); color: white; }
+        .badge-vendido { background: #95a5a6; color: white; }
+
+        .card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+
+        .card-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .card-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .price-cell {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+        .price-cell.accent { background: var(--teal-light); }
+        .price-cell-label {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .price-cell-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text);
+            margin-top: 2px;
+        }
+        .price-cell.accent .price-cell-val { color: var(--teal-dark); }
+
+        .beneficio-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 8px;
+            margin-top: 2px;
+        }
+        .beneficio-row.green { background: var(--green-light); }
+        .beneficio-row.red { background: var(--red-light); }
+        .beneficio-row.neutral { background: var(--bg); }
+        .beneficio-label { font-size: 12px; color: var(--muted); }
+        .beneficio-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .green .beneficio-val { color: var(--green); }
+        .red .beneficio-val { color: var(--red); }
+        .neutral .beneficio-val { color: var(--muted); }
+
+        .card-footer {
+            display: flex;
+            gap: 6px;
+            padding: 0 14px 14px;
+        }
+        .btn-edit {
+            flex: 1;
+            background: var(--teal-light);
+            color: var(--teal-dark);
+            border: none;
+            padding: 9px;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-delete {
+            background: #fdecea;
+            color: var(--red);
+            border: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+        .empty-icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+
+        /* LOADING */
+        .loading {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--teal);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 0;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px 20px 0 0;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px 20px 40px;
+            animation: slideUp 0.25s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(60px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+        .modal-handle {
+            width: 40px; height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--text);
+            background: white;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--teal);
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .precio-sugerido {
+            background: var(--teal-light);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .precio-sugerido-label { font-size: 13px; color: var(--teal-dark); font-weight: 600; }
+        .precio-sugerido-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--teal);
+        }
+        .btn-guardar {
+            width: 100%;
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+        .btn-cancelar {
+            width: 100%;
+            background: transparent;
+            color: var(--muted);
+            border: none;
+            padding: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1a2e30;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 999;
+            transition: transform 0.3s ease;
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* IMPORT MODAL */
+        .import-area {
+            background: var(--bg);
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+        .import-area textarea {
+            border: none;
+            background: transparent;
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            color: var(--text);
+        }
+        .import-help {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+        code {
+            background: var(--bg);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <div>
+            <div class="header-title">👗 Vinted — Laia & Tú</div>
+            <div class="header-subtitle">Inventario compartido</div>
+        </div>
+        <div class="header-sync">
+            <div class="sync-dot"></div>
+            <span id="sync-label">Sincronizando...</span>
+        </div>
+    </div>
+</header>
+
+<div class="stats-bar">
+    <div class="stats-inner">
+        <div class="stat">
+            <div class="stat-val" id="stat-total">—</div>
+            <div class="stat-label">Prendas</div>
+        </div>
+        <div class="stat">
+            <div class="stat-val" id="stat-disponibles">—</div>
+            <div class="stat-label">Disponibles</div>
+        </div>
+        <div class="stat">
+            <div class="stat-val" id="stat-vendidas">—</div>
+            <div class="stat-label">Vendidas</div>
+        </div>
+        <div class="stat">
+            <div class="stat-val" id="stat-ben-previsto">—</div>
+            <div class="stat-label">Ben. previsto</div>
+        </div>
+        <div class="stat">
+            <div class="stat-val" id="stat-ben-real" style="color:var(--green)">—</div>
+            <div class="stat-label">Ben. real</div>
+        </div>
+        <div class="stat">
+            <div class="stat-val" id="stat-diferencia">—</div>
+            <div class="stat-label">Diferencia</div>
+        </div>
+    </div>
+</div>
+
+<div class="actions">
+    <button class="btn-primary" onclick="abrirModal()">＋ Nueva prenda</button>
+    <button class="btn-secondary" onclick="abrirImport()">📥 Importar</button>
+</div>
+
+<div class="filter-bar">
+    <button class="filter-tab active" onclick="setFiltro('todos', this)">Todos</button>
+    <button class="filter-tab" onclick="setFiltro('Disponible', this)">Disponibles</button>
+    <button class="filter-tab" onclick="setFiltro('Vendido', this)">Vendidos</button>
+</div>
+
+<div class="grid" id="grid">
+    <div class="loading"><div class="spinner"></div>Cargando inventario...</div>
+</div>
+
+<!-- MODAL NUEVA/EDITAR PRENDA -->
+<div class="modal-overlay" id="modalPrenda">
+    <div class="modal-box">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="modal-title">Nueva prenda</div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Código</label>
+                <input type="text" id="p-codigo" placeholder="Ej: VT-001">
+            </div>
+            <div class="form-group">
+                <label>Estado</label>
+                <select id="p-estado">
+                    <option value="Disponible">🟢 Disponible</option>
+                    <option value="Vendido">🔴 Vendido</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" id="p-nombre" placeholder="Ej: Vestido floral Zara M">
+        </div>
+
+        <div class="form-group">
+            <label>Descripción</label>
+            <input type="text" id="p-descripcion" placeholder="Talla, marca, estado...">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Fecha compra</label>
+                <input type="date" id="p-fecha">
+            </div>
+            <div class="form-group">
+                <label>Precio compra (€) *</label>
+                <input type="number" id="p-compra" step="0.01" min="0" placeholder="0.00" oninput="actualizarSugerido()">
+            </div>
+        </div>
+
+        <div class="precio-sugerido">
+            <div class="precio-sugerido-label">💡 Precio venta recomendado<br><small style="font-weight:400;font-size:11px;">(compra + 85%, redondeado)</small></div>
+            <div class="precio-sugerido-val" id="precio-sugerido-val">—</div>
+        </div>
+
+        <div class="form-group">
+            <label>URL Foto</label>
+            <input type="text" id="p-foto" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+            <label>Precio venta real (€) <span style="color:var(--muted);font-weight:400">(solo si ya vendido)</span></label>
+            <input type="number" id="p-ventareal" step="0.01" min="0" placeholder="0.00">
+        </div>
+
+        <button class="btn-guardar" onclick="guardarPrenda()">💾 Guardar prenda</button>
+        <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+    </div>
+</div>
+
+<!-- MODAL IMPORTAR -->
+<div class="modal-overlay" id="modalImport">
+    <div class="modal-box">
+        <div class="modal-handle"></div>
+        <div class="modal-title">📥 Importar desde Excel</div>
+        <p class="import-help">
+            Copia las filas directamente desde Excel o Google Sheets y pégalas aquí.<br>
+            Columnas esperadas: <code>Código</code> · <code>Nombre</code> · <code>Descripción</code> · <code>Fecha</code> · <code>Precio compra</code>
+        </p>
+        <div class="import-area">
+            <textarea id="import-texto" placeholder="Pega aquí las filas de tu Excel..."></textarea>
+        </div>
+        <button class="btn-guardar" onclick="importarDatos()">Importar filas</button>
+        <button class="btn-cancelar" onclick="cerrarImport()">Cancelar</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    const API_KEY = 'AIzaSyC3O-J1KEH-SEhShqYySMMWOYYkwSDy2YQ';
+    const SHEET_ID = '1MHfSlQt_U6V51PmH9-t8OaYwzIRPPxayOedAtECE5Zk';
+    const SHEET_NAME = 'Full 1';
+    const BASE_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
+
+    const SA_EMAIL = 'vinted-app@vintedapp-500511.iam.gserviceaccount.com';
+    const SA_KEY = `-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDlu4njBPMWiCgm\nR8LX5uPPQgrJtrjFBhkSMEuyxeObn6AqE//Mcn4AunHc8G+S6FbbVh9d/bvlB97O\nwtn65SA2Z+eFuWbxFadLt/m5h2tan6W5AvLgec+FyUtHxIc5qR/MyQ+OfAyGEBfP\njTLYH0rQdT+sU7W2FPmppGlT9bu1R7ax12S3tHB5yEQJbONTClXbAU5Imn7cDXit\nDCQrll5A1PEM8xE0s1OAxjxBRvwK71SMbGYbVE08e2MKgdUuXNmzBmUcpZgBwe/S\n0DWxSqCb9TLj1VHwJQ5d3hVHbm5eTLOeFcTTck/0Fow8uhh5xSiRKQ6B/tVZ4vgw\nc9yEB1UZAgMBAAECggEABmxJfiyT7lNyt6L9ELYKIm/+gm9USjtWcy4OkXf2/r9G\nKsgmbx9vEe6kjB5KX7qCvb0Wyn4zgIx3GtFKDB5XovgPOiuVT4tTMNhxyBGbhHU6\nk3fS0O0VypSbN/aQ8E8pF1cyd50Ln+DuYOxHq9ECurkYfECf5qc+jG6PPJyZeawX\nqM0fDuaW/AQm3h11CJ4fuZ2icp9D274OqGE1BpNoluvSGEaSiDoEdeqaB1dS6snx\nM7jOt8UW3/GfMebT/RN7CThbWa9wYK53GAEvczzpjj+SShbyZTaNGwItoWDtH+3s\nrIyJgnpuS2QF5sqZwaPLwhzUJa8urKdxQDVXw4v6DQKBgQD5njCUEFFWoHnEYqYH\nhil0mvMipEaKKPD9iMKDDk+M+crMqCZ9nM41ZKAP9vn9HBDkypxHIXGxb2RBhSAg\nFy9+s5aQ1+bJCLgoKZAUEu2AJvVcLbzFO9lmAXYmGP/xXaOT+DIB1Jka8+wOk6AM\nzGnZi+LaTPAbJMv20Z+APr72LQKBgQDrmzHBOjccvPNhuv/17mXLWLlzSLdOClbU\nkTK8C2XCyTruC/U5nvk5pIuxR8+/HPlaRe5B9BvpLD2eGixd/NIOl2Ur0W5rZm+T\n3x73NhjLunG0dYFaD40GJTCDdZZ1+il9qz05mugg1P11EbOxnkKjdxk/77auxhOA\nOBxfI+R6HQKBgQDO69JLOweiLt8h68DEJfQBhF0ej10mNHApS5Aqwdcx/vOdGZrm\nr/DElAiXk12B8x0R+972nAO6WaObKLcLwwyNFGQw57iZV9AJAwM7kMEuZZ0pb4S3\nXziE9ZsyU7D/LWdnRux1Vf4hOKirILchROZN/0brPbIgXi1yCi0VS25TdQKBgAtr\n3ZCZatyIyF+fehMI+IRQC8Vr6/7rf2QUmdoFz2wO5z1s9PlTHI/PyznP2mFQXUIk\nC7XEyKmYDHCioi34OJKegjgKkgjA0X3gnhar163gnux5mcis4lA+80gcJiwX8XT3\nHSOyv7f/uz22mvhsTJyyBFZWH4v/bCiWD8II8mV9AoGBAI2ad/q1v13llCczimAC\nJUfjr1JlhB1dgyZumdvXYjDO6LzR/T79WSiXPmIjhXLp03ZWh1lC7+IZLJVORCwA\n/Ma6Q17fDbBgpJ9g4own+lnTWzI+v5NUnR+B4PNgNfTvn3dfabJctN9cE/eHRc1u\nteawtVqq4HuF4/9lsVm+S0zL\n-----END PRIVATE KEY-----\n`;
+
+    let inventario = [];
+    let editandoIndex = null;
+    let filtroActual = 'todos';
+    let cachedToken = null;
+    let tokenExpiry = 0;
+
+    // ─── JWT AUTH ────────────────────────────────────────────────────────
+
+    function base64url(str) {
+        return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+
+    function base64urlFromUint8(arr) {
+        return btoa(String.fromCharCode(...arr)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+
+    async function getAccessToken() {
+        const now = Math.floor(Date.now() / 1000);
+        if (cachedToken && now < tokenExpiry - 60) return cachedToken;
+
+        const header = base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+        const claim = base64url(JSON.stringify({
+            iss: SA_EMAIL,
+            scope: 'https://www.googleapis.com/auth/spreadsheets',
+            aud: 'https://oauth2.googleapis.com/token',
+            iat: now,
+            exp: now + 3600
+        }));
+
+        const sigInput = `${header}.${claim}`;
+
+        // Import private key
+        const pemBody = SA_KEY.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g, '');
+        const binaryDer = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
+        const cryptoKey = await crypto.subtle.importKey(
+            'pkcs8', binaryDer.buffer,
+            { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+            false, ['sign']
+        );
+
+        const signature = await crypto.subtle.sign(
+            'RSASSA-PKCS1-v1_5',
+            cryptoKey,
+            new TextEncoder().encode(sigInput)
+        );
+
+        const jwt = `${sigInput}.${base64urlFromUint8(new Uint8Array(signature))}`;
+
+        const res = await fetch('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`
+        });
+        const data = await res.json();
+        cachedToken = data.access_token;
+        tokenExpiry = now + 3600;
+        return cachedToken;
+    }
+
+    // ─── GOOGLE SHEETS API ──────────────────────────────────────────────
+
+    async function leerHoja() {
+        try {
+            const res = await fetch(`${BASE_URL}/values/${encodeURIComponent(SHEET_NAME)}?key=${API_KEY}`);
+            const data = await res.json();
+            if (!data.values || data.values.length < 2) return [];
+            const rows = data.values.slice(1);
+            return rows.map(r => ({
+                codigo:        r[0] || '',
+                nombre:        r[1] || '',
+                descripcion:   r[2] || '',
+                fechaCompra:   r[3] || '',
+                compra:        parseFloat(r[4]) || 0,
+                foto:          r[5] || '',
+                estado:        r[6] || 'Disponible',
+                ventaRecom:    parseFloat(r[7]) || 0,
+                ventaReal:     parseFloat(r[8]) || 0,
+                beneficioReal: parseFloat(r[9]) || 0,
+            }));
+        } catch(e) {
+            mostrarToast('⚠️ Error al leer la hoja');
+            return [];
+        }
+    }
+
+    async function escribirHoja(datos) {
+        try {
+            const token = await getAccessToken();
+            const header = [['Codigo','Nombre','Descripcion','FechaCompra','PrecioCompra','Foto','Estado','PrecioVentaRecomendado','PrecioVentaReal','BeneficioReal']];
+            const rows = datos.map(p => [
+                p.codigo, p.nombre, p.descripcion, p.fechaCompra,
+                p.compra, p.foto, p.estado,
+                p.ventaRecom, p.ventaReal, p.beneficioReal
+            ]);
+            const values = header.concat(rows);
+
+            // Limpiar
+            await fetch(`${BASE_URL}/values/${encodeURIComponent(SHEET_NAME)}!A:J:clear`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            // Escribir
+            const res = await fetch(`${BASE_URL}/values/${encodeURIComponent(SHEET_NAME)}!A1?valueInputOption=USER_ENTERED`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ values })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                console.error(err);
+                mostrarToast('⚠️ Error al guardar: ' + (err.error?.message || 'desconocido'));
+                return false;
+            }
+            return true;
+        } catch(e) {
+            console.error(e);
+            mostrarToast('⚠️ Error al guardar');
+            return false;
+        }
+    }
+
+    async function cargarInventario() {
+        setSyncLabel('Sincronizando...');
+        inventario = await leerHoja();
+        setSyncLabel('Al día ✓');
+        renderizar();
+        actualizarStats();
+    }
+
+    // ─── RENDER ─────────────────────────────────────────────────────────
+
+    function renderizar() {
+        const grid = document.getElementById('grid');
+        const lista = filtroActual === 'todos'
+            ? inventario
+            : inventario.filter(p => p.estado === filtroActual);
+
+        if (lista.length === 0) {
+            grid.innerHTML = `<div class="empty">
+                <div class="empty-icon">👗</div>
+                <div class="empty-title">${filtroActual === 'todos' ? 'Sin prendas todavía' : 'Ninguna prenda en este estado'}</div>
+                <p>${filtroActual === 'todos' ? 'Añade tu primera prenda con el botón de arriba.' : ''}</p>
+            </div>`;
+            return;
+        }
+
+        grid.innerHTML = lista.map((p, i) => {
+            const idxReal = inventario.indexOf(p);
+            const ventaRecom = calcularVentaRecomendada(p.compra);
+            const benPrevisto = ventaRecom - p.compra;
+            const benReal = p.ventaReal > 0 ? p.ventaReal - p.compra : null;
+            const benClase = benReal === null ? 'neutral' : (benReal >= 5 ? 'green' : 'red');
+            const fotoStyle = p.foto ? `background-image:url('${p.foto}')` : '';
+
+            return `
+            <div class="card ${p.estado === 'Vendido' ? 'vendido' : ''}">
+                <div class="card-img" style="${fotoStyle}">
+                    ${!p.foto ? '👗' : ''}
+                    ${p.codigo ? `<div class="card-code">${p.codigo}</div>` : ''}
+                    <div class="card-badge badge-${p.estado === 'Disponible' ? 'disponible' : 'vendido'}">${p.estado}</div>
+                </div>
+                <div class="card-body">
+                    <div class="card-name">${p.nombre}</div>
+                    ${p.descripcion ? `<div class="card-desc">${p.descripcion}</div>` : ''}
+                    ${p.fechaCompra ? `<div style="font-size:12px;color:var(--muted)">📅 ${p.fechaCompra}</div>` : ''}
+
+                    <div class="price-grid">
+                        <div class="price-cell">
+                            <div class="price-cell-label">Compra</div>
+                            <div class="price-cell-val">${p.compra.toFixed(2)}€</div>
+                        </div>
+                        <div class="price-cell accent">
+                            <div class="price-cell-label">Venta rec.</div>
+                            <div class="price-cell-val">${ventaRecom.toFixed(2)}€</div>
+                        </div>
+                    </div>
+
+                    <div class="beneficio-row neutral">
+                        <span class="beneficio-label">💡 Beneficio previsto</span>
+                        <span class="beneficio-val" style="color:var(--teal-dark)">${benPrevisto >= 0 ? '+' : ''}${benPrevisto.toFixed(2)}€</span>
+                    </div>
+
+                    <div style="border-top:1px solid var(--border); margin: 6px 0;"></div>
+
+                    <div class="price-grid">
+                        <div class="price-cell">
+                            <div class="price-cell-label">Venta real</div>
+                            <div class="price-cell-val">${p.ventaReal > 0 ? p.ventaReal.toFixed(2)+'€' : '—'}</div>
+                        </div>
+                        <div class="price-cell ${benClase === 'green' ? 'accent' : benClase === 'red' ? '' : ''}">
+                            <div class="price-cell-label">Beneficio real</div>
+                            <div class="price-cell-val" style="color:${benClase === 'green' ? 'var(--green)' : benClase === 'red' ? 'var(--red)' : 'var(--muted)'}">
+                                ${benReal !== null ? (benReal >= 0 ? '+' : '') + benReal.toFixed(2) + '€' : '—'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn-edit" onclick="editarPrenda(${idxReal})">✏️ Editar</button>
+                    <button class="btn-delete" onclick="eliminarPrenda(${idxReal})">🗑️</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function actualizarStats() {
+        const total = inventario.length;
+        const disponibles = inventario.filter(p => p.estado === 'Disponible').length;
+        const vendidas = inventario.filter(p => p.estado === 'Vendido').length;
+        const benPrevisto = inventario.reduce((s, p) => s + (calcularVentaRecomendada(p.compra) - p.compra), 0);
+        const benReal = inventario.filter(p => p.ventaReal > 0).reduce((s, p) => s + (p.ventaReal - p.compra), 0);
+        const diferencia = benReal - inventario.filter(p => p.ventaReal > 0).reduce((s, p) => s + (calcularVentaRecomendada(p.compra) - p.compra), 0);
+
+        document.getElementById('stat-total').textContent = total;
+        document.getElementById('stat-disponibles').textContent = disponibles;
+        document.getElementById('stat-vendidas').textContent = vendidas;
+        document.getElementById('stat-ben-previsto').textContent = benPrevisto.toFixed(0) + '€';
+        document.getElementById('stat-ben-real').textContent = benReal.toFixed(0) + '€';
+        document.getElementById('stat-diferencia').textContent = (diferencia >= 0 ? '+' : '') + diferencia.toFixed(0) + '€';
+        document.getElementById('stat-diferencia').style.color = diferencia >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+
+    // ─── LÓGICA PRECIOS ─────────────────────────────────────────────────
+
+    function calcularVentaRecomendada(compra) {
+        if (!compra) return 0;
+        const bruto = compra * 1.85;
+        return Math.ceil(bruto); // redondear al alza
+    }
+
+    function actualizarSugerido() {
+        const compra = parseFloat(document.getElementById('p-compra').value) || 0;
+        const sugerido = calcularVentaRecomendada(compra);
+        document.getElementById('precio-sugerido-val').textContent = sugerido > 0 ? sugerido.toFixed(2) + '€' : '—';
+    }
+
+    // ─── MODAL NUEVA/EDITAR ──────────────────────────────────────────────
+
+    function abrirModal(prenda = null, index = null) {
+        editandoIndex = index;
+        document.getElementById('modal-title').textContent = prenda ? 'Editar prenda' : 'Nueva prenda';
+        document.getElementById('p-codigo').value = prenda?.codigo || '';
+        document.getElementById('p-nombre').value = prenda?.nombre || '';
+        document.getElementById('p-descripcion').value = prenda?.descripcion || '';
+        document.getElementById('p-fecha').value = prenda?.fechaCompra || '';
+        document.getElementById('p-compra').value = prenda?.compra || '';
+        document.getElementById('p-foto').value = prenda?.foto || '';
+        document.getElementById('p-estado').value = prenda?.estado || 'Disponible';
+        document.getElementById('p-ventareal').value = prenda?.ventaReal > 0 ? prenda.ventaReal : '';
+        actualizarSugerido();
+        document.getElementById('modalPrenda').classList.add('open');
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalPrenda').classList.remove('open');
+        editandoIndex = null;
+    }
+
+    function editarPrenda(i) {
+        abrirModal(inventario[i], i);
+    }
+
+    async function guardarPrenda() {
+        const nombre = document.getElementById('p-nombre').value.trim();
+        const compra = parseFloat(document.getElementById('p-compra').value) || 0;
+        if (!nombre) { mostrarToast('⚠️ El nombre es obligatorio'); return; }
+        if (!compra) { mostrarToast('⚠️ El precio de compra es obligatorio'); return; }
+
+        const ventaRecom = calcularVentaRecomendada(compra);
+        const ventaReal = parseFloat(document.getElementById('p-ventareal').value) || 0;
+        const beneficioReal = ventaReal > 0 ? ventaReal - compra : 0;
+
+        const prenda = {
+            codigo:      document.getElementById('p-codigo').value.trim(),
+            nombre,
+            descripcion: document.getElementById('p-descripcion').value.trim(),
+            fechaCompra: document.getElementById('p-fecha').value,
+            compra,
+            foto:        document.getElementById('p-foto').value.trim(),
+            estado:      document.getElementById('p-estado').value,
+            ventaRecom,
+            ventaReal,
+            beneficioReal,
+        };
+
+        if (editandoIndex !== null) {
+            inventario[editandoIndex] = prenda;
+        } else {
+            inventario.push(prenda);
+        }
+
+        cerrarModal();
+        mostrarToast('💾 Guardando...');
+        const ok = await escribirHoja(inventario);
+        if (ok) {
+            mostrarToast('✅ Guardado en Google Sheets');
+            renderizar();
+            actualizarStats();
+        }
+    }
+
+    async function eliminarPrenda(i) {
+        if (!confirm(`¿Eliminar "${inventario[i].nombre}"?`)) return;
+        inventario.splice(i, 1);
+        mostrarToast('🗑️ Eliminando...');
+        const ok = await escribirHoja(inventario);
+        if (ok) {
+            mostrarToast('✅ Eliminado');
+            renderizar();
+            actualizarStats();
+        }
+    }
+
+    // ─── IMPORTAR ────────────────────────────────────────────────────────
+
+    function abrirImport() {
+        document.getElementById('import-texto').value = '';
+        document.getElementById('modalImport').classList.add('open');
+    }
+    function cerrarImport() {
+        document.getElementById('modalImport').classList.remove('open');
+    }
+
+    async function importarDatos() {
+        const texto = document.getElementById('import-texto').value.trim();
+        if (!texto) { mostrarToast('⚠️ Pega primero los datos'); return; }
+
+        let nuevas = 0;
+        texto.split('\n').forEach(linea => {
+            const col = linea.split(/\t|;/);
+            if (col.length >= 2 && col[0].trim()) {
+                const compra = parseFloat(col[4]?.replace(',', '.') || col[1]?.replace(',', '.')) || 0;
+                inventario.push({
+                    codigo:      col[0].trim(),
+                    nombre:      col[1]?.trim() || col[0].trim(),
+                    descripcion: col[2]?.trim() || '',
+                    fechaCompra: col[3]?.trim() || '',
+                    compra,
+                    foto:        '',
+                    estado:      'Disponible',
+                    ventaRecom:  calcularVentaRecomendada(compra),
+                    ventaReal:   0,
+                    beneficioReal: 0,
+                });
+                nuevas++;
+            }
+        });
+
+        cerrarImport();
+        mostrarToast(`📥 Importando ${nuevas} prendas...`);
+        const ok = await escribirHoja(inventario);
+        if (ok) {
+            mostrarToast(`✅ ${nuevas} prendas importadas`);
+            renderizar();
+            actualizarStats();
+        }
+    }
+
+    // ─── HELPERS ─────────────────────────────────────────────────────────
+
+    function setFiltro(filtro, btn) {
+        filtroActual = filtro;
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        renderizar();
+    }
+
+    function setSyncLabel(txt) {
+        document.getElementById('sync-label').textContent = txt;
+    }
+
+    let toastTimer;
+    function mostrarToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // Cerrar modal al tocar fuera
+    document.querySelectorAll('.modal-overlay').forEach(m => {
+        m.addEventListener('click', e => { if (e.target === m) { m.classList.remove('open'); } });
+    });
+
+    // ─── INICIO ───────────────────────────────────────────────────────────
+    cargarInventario();
+    // Recargar cada 60s para ver cambios de la otra persona
+    setInterval(cargarInventario, 60000);
+</script>
+</body>
+</html>
